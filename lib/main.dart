@@ -22,6 +22,29 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Placeholder();
+    return Scaffold(
+      body: Center(
+        child: Text(
+          '0',
+          style: TextStyle(height: 52),
+        ),
+      ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: () {},
+            child: Icon(Icons.add),
+            heroTag: 'increment',
+          ),
+          SizedBox(width: 10),
+          FloatingActionButton(
+            onPressed: () {},
+            child: Icon(Icons.remove),
+            heroTag: 'decrement',
+          )
+        ],
+      ),
+    );
   }
 }
