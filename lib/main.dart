@@ -30,7 +30,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocListener<CounterCubit, CounterState>(
+      body: BlocConsumer<CounterCubit, CounterState>(
         listener: (context, state) {
           if (state.counter == 3) {
             showDialog(
@@ -45,16 +45,14 @@ class HomePage extends StatelessWidget {
                 MaterialPageRoute(builder: ((context) => OtherPage())));
           }
         },
-        child: BlocBuilder<CounterCubit, CounterState>(
-          builder: (context, state) {
-            return Center(
-              child: Text(
-                '${state.counter}',
-                style: TextStyle(fontSize: 52),
-              ),
-            );
-          },
-        ),
+        builder: (context, state) {
+          return Center(
+            child: Text(
+              '${state.counter}',
+              style: TextStyle(fontSize: 52),
+            ),
+          );
+        },
       ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
