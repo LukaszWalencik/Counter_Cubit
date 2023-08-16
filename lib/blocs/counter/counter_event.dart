@@ -1,8 +1,30 @@
-part of 'counter_bloc.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+class CounterState {
+  final int counter;
 
-sealed class CounterEvent extends Equatable {
-  const CounterEvent();
+  CounterState({required this.counter});
+
+  factory CounterState.initial() {
+    return CounterState(counter: 0);
+  }
 
   @override
-  List<Object> get props => [];
+  bool operator ==(covariant CounterState other) {
+    if (identical(this, other)) return true;
+
+    return other.counter == counter;
+  }
+
+  @override
+  String toString() => 'CounterState(counter: $counter)';
+  @override
+  int get hashCode => counter.hashCode;
+
+  CounterState copyWith({
+    int? counter,
+  }) {
+    return CounterState(
+      counter: counter ?? this.counter,
+    );
+  }
 }
