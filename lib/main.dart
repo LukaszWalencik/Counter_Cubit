@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_counter_cubit/blocs/bloc/counter_bloc.dart';
+import 'package:my_counter_cubit/blocs/bloc/counter_event.dart';
 import 'package:my_counter_cubit/cubits/counter/counter_cubit.dart';
 import 'package:my_counter_cubit/cubits/counter/counter_state.dart';
 import 'package:my_counter_cubit/other.dart';
@@ -14,8 +16,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<CounterCubit>(
-      create: (context) => CounterCubit(),
+    return BlocProvider<CounterBloc>(
+      create: (context) => CounterBloc(),
       child: MaterialApp(
           title: 'My Counter Cubit',
           debugShowCheckedModeBanner: false,
@@ -30,36 +32,37 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocConsumer<CounterCubit, CounterState>(
+      body: BlocListener<CounterBloc, CounterState>(
         listener: (context, state) {
           if (state.counter == 3) {
             showDialog(
                 context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    content: Text('Counter is ${state.counter}'),
-                  );
-                });
-          } else if (state.counter == -3) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: ((context) => OtherPage())));
+                builder: (context) => AlertDialog(
+                      content: Text('State is ${state.counter}'),
+                    ));
+          } else if (state.counter == -1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => OtherPage(),
+              ),
+            );
           }
         },
-        builder: (context, state) {
-          return Center(
-            child: Text(
-              '${state.counter}',
-              style: TextStyle(fontSize: 52),
-            ),
-          );
-        },
+        child: Center(
+          child: Text(
+            '${context.watch<CounterBloc>().state.counter}',
+            style: TextStyle(fontSize: 52),
+          ),
+        ),
       ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
             onPressed: () {
-              BlocProvider.of<CounterCubit>(context).increment();
+              BlocProvider.of<CounterBloc>(context)
+                  .add(IncrementCounterEvent());
             },
             child: Icon(Icons.add),
             heroTag: 'increment',
@@ -67,7 +70,8 @@ class HomePage extends StatelessWidget {
           SizedBox(width: 10),
           FloatingActionButton(
             onPressed: () {
-              BlocProvider.of<CounterCubit>(context).decrement();
+              BlocProvider.of<CounterBloc>(context)
+                  .add(DecrementCounterEvent());
             },
             child: Icon(Icons.remove),
             heroTag: 'decrement',
